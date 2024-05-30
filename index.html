@@ -16,11 +16,20 @@
             <p>This cat made a mess.</p>
         </section>
         <section class="image">
-            <img src="cat.png" alt="cat">
+            <img id="catImage" src="cat.png" alt="cat">
         </section>
+        <button id="changeImage">Change Image</button>
     </main>
     <footer>
         <p>&copy; By ME!!</p>
     </footer>
+    <script>
+        const changeImageBtn = document.getElementById('changeImage');
+        const catImage = document.getElementById('catImage');
+
+        changeImageBtn.addEventListener('click', () => {
+            catImage.src = "catv2.png"; 
+        });
+    </script>
 </body>
 </html>
