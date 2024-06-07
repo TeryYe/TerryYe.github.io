@@ -3,33 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cat</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Image Rating</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            overflow: hidden; /* To hide falling images when they go out of the viewport */
+        }
+        .image-container {
+            margin-bottom: 20px;
+        }
+        .rating {
+            margin-top: 10px;
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            font-size: 30px;
+            cursor: pointer;
+            color: #ddd;
+        }
+        .rating input:checked ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: gold;
+        }
+        #end-screen {
+            display: none;
+            margin-top: 50px;
+        }
+        .falling-image {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            from {
+                transform: translateY(-100px);
+            }
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Cat</h1>
-    </header>
-    <main>
-        <section class="intro">
-            <p>This cat made a mess.</p>
-        </section>
-        <section class="image">
-            <img id="catImage" src="cat.png" alt="cat">
-        </section>
-        <button id="changeImage">Change Image</button>
-    </main>
-    <footer>
-        <p>&copy; By ME!!</p>
-    </footer>
-    <script>
-        const changeImageBtn = document.getElementById('changeImage');
-        const catImage = document.getElementById('catImage');
+    <h1>Rate the Cat Image</h1>
+    <div id="image-section">
+        <div class="image-container">
+            <img id="image" src="cat.png" alt="Image" width="300">
+            <div class="rating">
+                <input type="radio" id="star5" name="rating" value="5"><label for="star5">☆</label>
+                <input type="radio" id="star4" name="rating" value="4"><label for="star4">☆</label>
+                <input type="radio" id="star3" name="rating" value="3"><label for="star3">☆</label>
+                <input type="radio" id="star2" name="rating" value="2"><label for="star2">☆</label>
+                <input type="radio" id="star1" name="rating" value="1"><label for="star1">☆</label>
+            </div>
+        </div>
+        <button onclick="changeImage()">Next Image</button>
+    </div>
+    <div id="end-screen">
+        <h2>Thanks for voting!</h2>
+    </div>
 
-        changeImageBtn.addEventListener('click', () => {
-            catImage.src = "catv2.png"; 
-        });
+    <script>
+        let images = ["cat.png", "catv2.png", "catv3.png"];
+        let currentIndex = 0;
+
+        function changeImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            if (currentIndex === 0) {
+                document.getElementById('image-section').style.display = 'none';
+                document.getElementById('end-screen').style.display = 'block';
+                startFallingImages();
+            } else {
+                document.getElementById('image').src = images[currentIndex];
+
+                // Reset rating
+                let ratings = document.getElementsByName('rating');
+                for (let i = 0; i < ratings.length; i++) {
+                    ratings[i].checked = false;
+                }
+            }
+        }
+
+        function startFallingImages() {
+            for (let i = 0; i < 20; i++) {
+                createFallingImage();
+            }
+            setTimeout(stopFallingImages, 5000); // Stop falling images after 5 seconds
+        }
+
+        function createFallingImage() {
+            let img = document.createElement('img');
+            img.src = 'catv4.png'; // Image source for falling images
+            img.className = 'falling-image';
+            img.style.left = Math.random() * window.innerWidth + 'px';
+            img.style.animationDuration = (2 + Math.random() * 3) + 's';
+            document.body.appendChild(img);
+        }
+
+        function stopFallingImages() {
+            let images = document.getElementsByClassName('falling-image');
+            while (images[0]) {
+                images[0].parentNode.removeChild(images[0]);
+            }
+        }
     </script>
 </body>
 </html>
